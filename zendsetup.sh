@@ -27,8 +27,10 @@ read repo
 # validate repo not empty
 if [[ -z $repo ]]
 then
-  echo "No repo entered..."
-  exit 2
+  echo "Creating empty folder"
+  mkdir /usr/local/zend/apache2/htdocs/$projname
+else
+  git clone $repo /usr/local/zend/apache2/htdocs/$projname
 fi
 
 hostnameresult=sudo cat /etc/hosts | grep "$projname.local"
@@ -39,7 +41,6 @@ then
   echo "127.0.0.1   $projname.local" |  sudo tee -a /etc/hosts
 fi
 
-git clone $repo /usr/local/zend/apache2/htdocs/$projname
 
 # output vhost data to /usr/local/zend/etc/sites.d/vhost_<projname>.conf
 echo "<VirtualHost *:80>" | sudo tee -a /usr/local/zend/etc/sites.d/vhost_$projname.conf
